@@ -1,0 +1,47 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vm.box_version = "2011.0"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 1
+    vb.memory = 512
+  end
+  
+  config.vm.provision "shell",  path: "scripts/bootstrap_centos.sh"
+  
+  config.vm.define "master", primary: true do |master|
+    master.vm.hostname = "master"
+    master.vm.network "private_network", ip: "192.168.42.110"
+    master.vm.provision "shell",  inline:  <<-EOF
+      echo 'Master Script...'
+      set -eux
+      MY_IP=192.168.42.110
+      echo '192.168.42.111 worker' >> /etc/hosts
+      
+      echo "Installing master k3S..."
+      curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--cluster-init --node-ip=${MY_IP} --token=super_secret_token --write-kubeconfig-mode 644" sh -
+      
+      echo "k3S master node installed."
+      EOF
+      
+    end
+    
+    config.vm.define "worker" do |worker|
+      worker.vm.hostname = "worker"
+      worker.vm.network "private_network", ip: "192.168.42.111"
+      worker.vm.provision "shell",  inline:  <<-EOF
+      echo 'Worker Script...'
+      set -eux
+      MY_IP=192.168.42.111
+      echo '192.168.42.110 master' >> /etc/hosts
+      
+      echo "Installing worker k3S..."
+      curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--server=https://master:6443 --node-ip=${MY_IP} --token=super_secret_token" sh -
+      echo "k3S worker node installed."
+
+    EOF
+    
+  end
+
+
+end
