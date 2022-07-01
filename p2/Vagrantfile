@@ -1,0 +1,23 @@
+IP_SERVER="192.168.42.110"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vm.box_version = "2011.0"
+
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = 1
+    v.memory = 1024
+  end
+
+  config.vm.define "server" do |server|
+    server.vm.hostname = "server"
+    server.vm.network "private_network", ip: IP_SERVER
+    # shared folder doesnt work ! 
+    # server.vm.synced_folder "./config", "/teste", type: "virtualbox", automount: true, create: true
+    # server.vm.synced_folder ".", "/vagrant", type: "nfs"
+    server.vm.provision "shell",  path: "scripts/install_k3s.sh",
+      env: {"NODE_IP" => IP_SERVER}
+
+  end
+
+end
