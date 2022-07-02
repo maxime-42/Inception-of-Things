@@ -28,20 +28,20 @@ Vagrant.configure("2") do |config|
         echo "k3S node named $HOSTNAME installed with node ip $NODE_IP."  
       EOF
       
-    end
+  end
     
-    config.vm.define WORKER_HOSTNAME do |worker|
-      worker.vm.hostname = WORKER_HOSTNAME
-      worker.vm.network "private_network", ip: WORKER_IP
-      worker.vm.provision "shell",
-        env: {"NODE_IP" => WORKER_IP, "MASTER_IP" => MASTER_IP, "MASTER_HOSTNAME" => MASTER_HOSTNAME, "TOKEN" => K3S_TOKEN},
-        inline:  <<-EOF
-            set -eu
-            echo "$MASTER_IP $MASTER_HOSTNAME" >> /etc/hosts
-            curl -sfL https://get.k3s.io \
-              | INSTALL_K3S_EXEC="--server=https://${MASTER_HOSTNAME}:6443 --node-ip=${NODE_IP} --token=${TOKEN}" sh -
-            echo "k3S node named $HOSTNAME installed with node ip $NODE_IP."
-        EOF
+  config.vm.define WORKER_HOSTNAME do |worker|
+    worker.vm.hostname = WORKER_HOSTNAME
+    worker.vm.network "private_network", ip: WORKER_IP
+    worker.vm.provision "shell",
+      env: {"NODE_IP" => WORKER_IP, "MASTER_IP" => MASTER_IP, "MASTER_HOSTNAME" => MASTER_HOSTNAME, "TOKEN" => K3S_TOKEN},
+      inline:  <<-EOF
+          set -eu
+          echo "$MASTER_IP $MASTER_HOSTNAME" >> /etc/hosts
+          curl -sfL https://get.k3s.io \
+            | INSTALL_K3S_EXEC="--server=https://${MASTER_HOSTNAME}:6443 --node-ip=${NODE_IP} --token=${TOKEN}" sh -
+          echo "k3S node named $HOSTNAME installed with node ip $NODE_IP."
+      EOF
     
   end
 
