@@ -30,3 +30,4 @@ log_info "k3S server node installed."
 
 log_info "Setting up kubectl completion..."
 /usr/local/bin/kubectl completion bash >> /etc/bash_completion.d/kubectl
+log_info "All done !"
