@@ -19,7 +19,12 @@ Vagrant.configure("2") do |config|
     sudo apt-get update
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends gdm3 ubuntu-desktop-minimal
     echo "display manager and desktop installed."
-  
+
+    curl -sfL https://get.docker.com | sudo sh -
+    sudo usermod -aG docker "$USER"
+    docker run --rm hello-world
+    echo "docker installed."
+
     sudo apt-get install -y virtualbox
     echo "virtualbox installed."
 
