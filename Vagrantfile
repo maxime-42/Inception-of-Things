@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
     sudo bash -c 'echo "* 192.168.42.0/24" >> /etc/vbox/networks.conf'
     echo "vbox allowed ranges set (192.168.42.0/24)"
 
-    vagrant autocomplete install 1> /dev/null
+    # vagrant autocomplete install 1> /dev/null
 
     cd /home/vagrant/Desktop/iot/p1
     vagrant up
