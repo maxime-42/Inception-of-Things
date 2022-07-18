@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
     vb.customize ['modifyvm', :id, '--clipboard-mode', 'bidirectional']
     vb.customize ['modifyvm', :id, '--draganddrop', 'bidirectional']
     vb.customize ["modifyvm", :id, "--vram", "128"]
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
   end
 
   config.vm.synced_folder ".", "/home/vagrant/Desktop/iot", type: "virtualbox"
