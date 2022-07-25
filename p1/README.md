@@ -39,7 +39,4 @@ Kubernetes
   <li>https://youtube.com/playlist?list=PL7bmigfV0EqQw4WnD0wF-SRBYttCFeBbF</li>
 </ul>
 <ul>
-  github / gitlab
-  <li>https://github.com/ilkou/Inception-of-Things</li>
-  <li>https://gitlab.com/flmarsil/inception-of-things</li>
 </lu>
