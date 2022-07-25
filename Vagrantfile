@@ -22,11 +22,10 @@ Vagrant.configure("2") do |config|
 
     curl -sfL https://get.docker.com | sudo sh -
     sudo usermod -aG docker "$USER"
-    docker run --rm hello-world
     echo "docker installed."
 
-    sudo apt-get install -y virtualbox
-    echo "virtualbox installed."
+    sudo apt-get install -y virtualbox vagrant
+    echo "virtualbox and vagrant installed."
 
     sudo snap install --classic code
     echo "vscode installed."
@@ -40,12 +39,12 @@ Vagrant.configure("2") do |config|
     cd -
     echo "kubectl installed."
     
-    VAGRANT="https://releases.hashicorp.com/vagrant/2.2.19/vagrant_2.2.19_linux_amd64.zip"
-    mkdir -p ~/bin
-    wget -qO- "$VAGRANT" | busybox unzip -d ~/bin/ - 1> /dev/null
-    chmod +x ~/bin/vagrant
-    sudo apt-get install -y libarchive-tools
-    echo "vagrant installed."
+    # VAGRANT="https://releases.hashicorp.com/vagrant/2.2.19/vagrant_2.2.19_linux_amd64.zip"
+    # mkdir -p ~/bin
+    # wget -qO- "$VAGRANT" | busybox unzip -d ~/bin/ - 1> /dev/null
+    # chmod +x ~/bin/vagrant
+    # sudo apt-get install -y libarchive-tools
+    # echo "vagrant installed."
 
   SHELL
   
@@ -63,7 +62,7 @@ Vagrant.configure("2") do |config|
     # vagrant autocomplete install 1> /dev/null
 
     cd /home/vagrant/Desktop/iot/p1
-    vagrant up
+    # vagrant up
 
   SHELL
 
