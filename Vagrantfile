@@ -1,3 +1,5 @@
+P2_VM_IP=192.169.42.110
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
   config.vagrant.plugins = "vagrant-reload"
@@ -50,7 +52,8 @@ Vagrant.configure("2") do |config|
   
   config.vm.provision :reload
 
-  config.vm.provision "shell", name: "Finishing setup...", privileged: false,  inline: <<-SHELL
+  config.vm.provision "shell", name: "Finishing setup...", privileged: false, 
+  env: {"P2_VM_IP" => P2_VM_IP}, inline: <<-SHELL
     set -ex
   
     gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'org.gnome.Terminal.desktop', 'code_code.desktop', 'firefox_firefox.desktop', 'virtualbox.desktop']"
@@ -58,7 +61,11 @@ Vagrant.configure("2") do |config|
     sudo mkdir -p /etc/vbox
     sudo bash -c 'echo "* 192.168.42.0/24" >> /etc/vbox/networks.conf'
     echo "vbox allowed ranges set (192.168.42.0/24)"
-
+    
+    sudo echo "$P2_VM_IP app1.com" >> /etc/hosts
+    sudo echo "$P2_VM_IP app2.com" >> /etc/hosts
+    sudo echo "$P2_VM_IP app3.com" >> /etc/hosts
+    
     # vagrant autocomplete install 1> /dev/null
 
     cd /home/vagrant/Desktop/iot/p1

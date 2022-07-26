@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-two
+  name: app-one
 spec:
   selector:
-    app: app-two
-  type: LoadBalancer
+    app: app-one
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: 80
@@ -17,26 +17,27 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-two
+  name: app-one
 spec:
   selector:
     matchLabels:
-      app: app-two
+      app: app-one
   template:
     metadata:
       labels:
-        app: app-two
+        app: app-one
     spec:
       containers:
-        - name: app-two
-          image: paulbouwer/hello-kubernetes
+        - name: app-one
+          image: paulbouwer/hello-kubernetes:1.10
+          imagePullPolicy: Always
           env:
             - name: MESSAGE
-              value: few
+              value: Hello from app one
           resources:
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: "64Mi"
+              cpu: "100m"
           ports:
             - containerPort: 80
               name: http

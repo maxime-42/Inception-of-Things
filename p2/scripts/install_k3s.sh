@@ -25,7 +25,7 @@ if [ -z "$NODE_IP" ]; then
 fi
 
 log_info "Installing server k3S with ${NODE_IP} as node ip..."
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--cluster-init --node-ip=${NODE_IP} --write-kubeconfig-mode 644" sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--cluster-init --node-ip=${NODE_IP} --flannel-iface=eth1 --write-kubeconfig-mode 644" sh -
 log_info "k3S server node installed."
 
 log_info "Setting up kubectl completion..."

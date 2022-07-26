@@ -5,12 +5,14 @@ metadata:
 spec:
   selector:
     app: app-two
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 80
-  - port: 443
-    targetPort: 443
+    - port: 80
+      targetPort: 80
+      name: http
+    - port: 443
+      targetPort: 443
+      name: https
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -27,16 +29,18 @@ spec:
         app: app-two
     spec:
       containers:
-      - name: app-two
-        image: paulbouwer/hello-kubernetes
-        env:
-          - name: MESSAGE
-            value: few
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 80
-        - containerPort: 443
-
+        - name: app-two
+          image: paulbouwer/hello-kubernetes:1.10
+          imagePullPolicy: Always
+          env:
+            - name: MESSAGE
+              value: Hello from app two
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
