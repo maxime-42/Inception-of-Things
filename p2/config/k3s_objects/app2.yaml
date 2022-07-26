@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: app-two
-  # type: 
+  type: LoadBalancer
   ports:
   - port: 80
     targetPort: 80
@@ -17,6 +17,7 @@ kind: Deployment
 metadata:
   name: app-two
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: app-two
@@ -28,6 +29,9 @@ spec:
       containers:
       - name: app-two
         image: paulbouwer/hello-kubernetes
+        env:
+          - name: MESSAGE
+            value: few
         resources:
           limits:
             memory: "128Mi"
