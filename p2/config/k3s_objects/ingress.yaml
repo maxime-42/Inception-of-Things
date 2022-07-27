@@ -3,6 +3,11 @@ kind: Ingress
 metadata:
   name: iot
 spec:
+  defaultBackend:
+    service:
+      name: app3
+      port:
+        number: 80
   rules:
   - host: app1.com
     http:
