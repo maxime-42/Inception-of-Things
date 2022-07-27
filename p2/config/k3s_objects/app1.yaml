@@ -1,49 +1,44 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-one
+  name: app1
   labels:
-    app: app-one
+    app: app1
 spec:
   selector:
-    app: app-one
+    app: app1
   type: ClusterIP
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
-      name: http
-    - protocol: TCP
-      port: 443
-      targetPort: 443
-      name: https
+      targetPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-one
+  name: app1
   labels:
-    app: app-one
+    app: app1
 spec:
   selector:
     matchLabels:
-      app: app-one
+      app: app1
   template:
     metadata:
       labels:
-        app: app-one
+        app: app1
     spec:
       containers:
-        - name: app-one
+        - name: app1
           # image: paulbouwer/hello-kubernetes:1.10
           image: ggjulio/app1:1.0
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 443
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          imagePullPolicy: Always
+          # imagePullPolicy: Always
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 443
+          #   initialDelaySeconds: 3
+          #   periodSeconds: 3
           env:
             - name: MESSAGE
               value: Hello from app one
@@ -52,7 +47,5 @@ spec:
               memory: "64Mi"
               cpu: "100m"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
-            - containerPort: 443
-              name: https
