@@ -28,6 +28,9 @@ log_info "Installing server k3S with ${NODE_IP} as node ip..."
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--cluster-init --node-ip=${NODE_IP} --flannel-iface=eth1 --write-kubeconfig-mode 644" sh -
 log_info "k3S server node installed."
 
+log_info "Setting up firewall..."
+sudo systemctl disable firewalld --now # yes... don't have time for this
+
 log_info "Setting up kubectl completion..."
 /usr/local/bin/kubectl completion bash >> /etc/bash_completion.d/kubectl
 log_info "All done !"
