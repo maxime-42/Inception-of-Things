@@ -31,14 +31,25 @@ spec:
       containers:
         - name: app3
           image: paulbouwer/hello-kubernetes:1.10
-          imagePullPolicy: Always
           env:
             - name: MESSAGE
-              value: Hello from app three
+              value: Hello from app3
+          ports:
+            - name: http
+              containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 30
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 1
+            periodSeconds: 10
           resources:
             limits:
               memory: "64Mi"
               cpu: "100m"
-          ports:
-            - containerPort: 8080
-              name: http
