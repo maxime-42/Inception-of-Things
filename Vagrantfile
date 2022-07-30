@@ -41,8 +41,8 @@ Vagrant.configure("2") do |config|
     cd -
     echo "kubectl installed."
     
-    # curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-    # echo "k3d installed."
+    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
+    echo "k3d installed."
     
   SHELL
   
