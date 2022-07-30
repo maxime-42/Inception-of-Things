@@ -1,4 +1,3 @@
-P2_VM_IP=192.169.42.110
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
@@ -11,6 +10,7 @@ Vagrant.configure("2") do |config|
     vb.customize ['modifyvm', :id, '--clipboard-mode', 'bidirectional']
     vb.customize ['modifyvm', :id, '--draganddrop', 'bidirectional']
     vb.customize ["modifyvm", :id, "--vram", "128"]
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
   end
 
@@ -41,19 +41,14 @@ Vagrant.configure("2") do |config|
     cd -
     echo "kubectl installed."
     
-    # VAGRANT="https://releases.hashicorp.com/vagrant/2.2.19/vagrant_2.2.19_linux_amd64.zip"
-    # mkdir -p ~/bin
-    # wget -qO- "$VAGRANT" | busybox unzip -d ~/bin/ - 1> /dev/null
-    # chmod +x ~/bin/vagrant
-    # sudo apt-get install -y libarchive-tools
-    # echo "vagrant installed."
-
+    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
+    echo "k3d installed."
+    
   SHELL
   
   config.vm.provision :reload
 
-  config.vm.provision "shell", name: "Finishing setup...", privileged: false, 
-  env: {"P2_VM_IP" => P2_VM_IP}, inline: <<-SHELL
+  config.vm.provision "shell", name: "Finishing setup...", privileged: false, inline: <<-SHELL
     set -ex
   
     gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'org.gnome.Terminal.desktop', 'code_code.desktop', 'firefox_firefox.desktop', 'virtualbox.desktop']"
@@ -62,14 +57,16 @@ Vagrant.configure("2") do |config|
     sudo bash -c 'echo "* 192.168.42.0/24" >> /etc/vbox/networks.conf'
     echo "vbox allowed ranges set (192.168.42.0/24)"
     
-    sudo echo "$P2_VM_IP app1.com" >> /etc/hosts
-    sudo echo "$P2_VM_IP app2.com" >> /etc/hosts
-    sudo echo "$P2_VM_IP app3.com" >> /etc/hosts
-    
+    sudo sh -c 'echo "192.168.42.110 app1.com" >> /etc/hosts'
+    sudo sh -c 'echo "192.168.42.110 app2.com" >> /etc/hosts'
+    sudo sh -c 'echo "192.168.42.110 app3.com" >> /etc/hosts'
+   
     # vagrant autocomplete install 1> /dev/null
 
-    cd /home/vagrant/Desktop/iot/p1
-    # vagrant up
+    vagrant plugin install vagrant-reload
+
+    cd /home/vagrant/Desktop/iot/p2
+    vagrant up
 
   SHELL
 
