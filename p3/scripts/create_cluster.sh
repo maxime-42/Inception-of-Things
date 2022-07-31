@@ -20,7 +20,7 @@ log_error(){
 	exit 1
 }
 
-CLUSTER_NAME='iot'
+CLUSTER_NAME='iot-p3'
 
 install_k3d(){
 	if ! [ -x "$(command -v k3d)" ]; then
@@ -45,6 +45,7 @@ install_k3d(){
 
 main(){ 
 	install_k3d
+	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME"
 
 }
