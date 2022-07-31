@@ -1,11 +1,13 @@
 # Inception-of-Things
 
-##### p1 Schema
+#### p1 Schema :
+![alt](reference/p1.drawio.svg)
 
-##### p2 Schema :
-
+#### p2 Schema :
 ![alt](reference/p2.drawio.svg)
-##### p3 Schema
+
+#### p3 Schema :
+![alt](reference/p3.drawio.svg)
 
 #### Sources :
 
