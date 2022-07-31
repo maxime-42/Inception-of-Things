@@ -20,6 +20,10 @@ log_error(){
 	exit 1
 }
 
+clear_lastline() {
+	tput cuu 1 && tput el
+}
+
 CLUSTER_NAME='iot-p3'
 
 install_k3d(){
@@ -45,12 +49,35 @@ install_k3d(){
 install_argo_cd(){
 	kubectl create namespace argocd
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+	log_info 'Waiting argocd pod to be ready to forward tcp trafic.'
+	i=300 		# wait 300s maximum
+	while [ $i -gt 0 ]; do
+		is_ready="$(kubectl -n argocd get pods -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(.type=="Ready")].status}')"
+		if [ "$is_ready" = 'True' ] ; then
+			break
+		fi
+		clear_lastline
+		log_info "Waiting... $i sec before timeout"
+		sleep 5
+		i=$((i - 5))
+	done
+	if [ "$i" = "0" ]; then
+		log_error 'timeout, bye.'
+	fi
+
+	kubectl port-forward svc/argocd-server -n argocd 8080:443 1>/dev/null &
+	log_info 'argocd port forwarded to localhost:8080'
+}
+
+get_default_argocd_creds(){
+	echo no
 }
 
 main(){ 
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
-	k3d cluster create "$CLUSTER_NAME"
+	k3d cluster create "$CLUSTER_NAME" --port 80:80@loadbalancer --port 443@loadbalancer --subnet 172.42.0.0/16
 	install_argo_cd
 }
 
