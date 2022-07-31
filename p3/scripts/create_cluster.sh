@@ -40,14 +40,18 @@ install_k3d(){
 	else
 		log_info "k3d completion already in $rc_path"
 	fi
+}
 
+install_argo_cd(){
+	kubectl create namespace argocd
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 }
 
 main(){ 
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME"
-
+	install_argo_cd
 }
 
 main "$@"
