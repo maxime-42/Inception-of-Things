@@ -28,7 +28,7 @@
 
 ##### k3d
 - [Create a Multi-Node Cluster with k3d](https://docs.rancherdesktop.io/how-to-guides/create-multi-node-cluster/)
-
+- [k3s + k3d = k8s - a new perfect match for dev and test](https://www.sokube.ch/post/k3s-k3d-k8s-a-new-perfect-match-for-dev-and-test)
 
 ##### Ingress
 
