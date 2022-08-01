@@ -7,6 +7,9 @@ set -e
 # sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 dnf -y update
 
+echo "Setting up firewall..."
+sudo systemctl disable firewalld --now # yes... don't have time for this
+
 echo "Setting up aliases"
 echo "alias k='kubectl'" >> /home/vagrant/.bashrc
 echo "alias c='clear'" >> /home/vagrant/.bashrc
