@@ -1,5 +1,5 @@
 SERVER_IP="192.168.42.110"
-SERVER_HOSTNAME="server"
+SERVER_HOSTNAME="mkayumbaS"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "generic/centos8"
