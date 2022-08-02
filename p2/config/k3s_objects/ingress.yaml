@@ -1,13 +1,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: iot
+  name: ing-iot-default
+  # annotations:
+  #   traefik.ingress.kubernetes.io/router.priority: "42"
 spec:
   defaultBackend:
     service:
       name: app-three
       port:
         number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ing-iot
+  # annotations:
+  #   traefik.ingress.kubernetes.io/router.priority: "4200"
+spec:
   rules:
     - host: app1.com
       http:

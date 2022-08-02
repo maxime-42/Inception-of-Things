@@ -4,8 +4,8 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = "vagrant-reload"
 
   config.vm.provider "virtualbox" do |vb|    
-    vb.cpus = 2
-    vb.memory = 4096
+    vb.cpus = 8
+    vb.memory = 8192
     vb.gui = true
     vb.customize ['modifyvm', :id, '--clipboard-mode', 'bidirectional']
     vb.customize ['modifyvm', :id, '--draganddrop', 'bidirectional']
@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
     sudo bash -c 'echo "* 192.168.42.0/24" >> /etc/vbox/networks.conf'
     echo "vbox allowed ranges set (192.168.42.0/24)"
     
-    sudo sh -c 'echo "192.168.42.110 app1.com app2.com app3.com" >> /etc/hosts'
+    sudo sh -c 'echo "192.168.42.110 app1.com app2.com app3.com no.com" >> /etc/hosts'
    
     # vagrant autocomplete install 1> /dev/null
 
