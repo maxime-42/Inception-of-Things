@@ -57,9 +57,7 @@ Vagrant.configure("2") do |config|
     sudo bash -c 'echo "* 192.168.42.0/24" >> /etc/vbox/networks.conf'
     echo "vbox allowed ranges set (192.168.42.0/24)"
     
-    sudo sh -c 'echo "192.168.42.110 app1.com" >> /etc/hosts'
-    sudo sh -c 'echo "192.168.42.110 app2.com" >> /etc/hosts'
-    sudo sh -c 'echo "192.168.42.110 app3.com" >> /etc/hosts'
+    sudo sh -c 'echo "192.168.42.110 app1.com app2.com app3.com" >> /etc/hosts'
    
     # vagrant autocomplete install 1> /dev/null
 

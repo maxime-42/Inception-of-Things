@@ -2,10 +2,10 @@
 
 set -e
 
-# echo "Setting up mirrors and dnf update..."
-# sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-# sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 dnf -y update
+
+echo "Disabling firewall..."
+sudo systemctl disable firewalld --now # https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-red-hat-centos-enterprise-linux
 
 echo "Setting up aliases"
 echo "alias k='kubectl'" >> /home/vagrant/.bashrc
