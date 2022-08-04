@@ -6,14 +6,11 @@
 
 
 ### if you get this problem "Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network"
--[Host-Only Networking](https://www.virtualbox.org/manual/ch06.html#:~:text=different%20user%20IDs.-,6.7.%C2%A0Host%2DOnly%20Networking,-Host%2Donly%20networking)
+- [Host-Only Networking](https://www.virtualbox.org/manual/ch06.html#:~:text=different%20user%20IDs.-,6.7.%C2%A0Host%2DOnly%20Networking,-Host%2Donly%20networking)
 - [Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network](https://stackoverflow.com/questions/69722254/vagrant-up-failing-for-virtualbox-provider-with-e-accessdenied-on-host-only-netw)
 
-<ul>Solved "Failed to download metadata for repo AppStream"
-
-  <li>https://www.cyberithub.com/solved-failed-to-download-metadata-for-repo-appstream/#:~:text=To%20fix%20the%20above%20error,centos.org%20using%20below%20commands.&text=Once%20the%20mirror%20is%20changed,it%20works%20fine%20as%20expected.
-  </li>
-</ul>
+###Solved "Failed to download metadata for repo AppStream"
+- [Solved "Failed to download metadata for repo AppStream"](https://www.cyberithub.com/solved-failed-to-download-metadata-for-repo-appstream/#:~:text=To%20fix%20the%20above%20error,centos.org%20using%20below%20commands.&text=Once%20the%20mirror%20is%20changed,it%20works%20fine%20as%20expected.)
 
 <ul>
   Linux SCP command
