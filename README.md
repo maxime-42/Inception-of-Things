@@ -45,3 +45,15 @@
 - [VT-x is not available](https://www.youtube.com/watch?v=JMT2qimIL9Q)
 - https://blog.mattchung.me/2020/08/18/how-to-configure-ubuntu-w-nested-virtualization-using-vagrant-and-virtualbox-on-macos/
 - https://stackoverflow.com/questions/38463579/vagrant-hangs-at-ssh-auth-method-private-key
+
+### Kubernetes
+- [kubernetes-configuration yaml file](https://medium.com/wesionary-team/making-sense-of-kubernetes-configuration-files-yaml-f90b033d5ad1)
+- [understanding-labels-selectors-and-annotations-in-kubernetes](https://faun.pub/understanding-labels-selectors-and-annotations-in-kubernetes-3c01ac943bb1)
+- [kubernetes-guide-for-labels-and-selectors](https://www.datree.io/resources/a-kubernetes-guide-for-labels-and-selectors)
+  
+- [basic-kubectl-commands](https://gitlab.com/nanuchi/youtube-tutorial-series/-/blob/master/basic-kubectl-commands/cli-commands.md)
+- [Kubernetes Tutorial full course](https://www.youtube.com/watch?v=X48VuDVv0do&t=9138s)
+  
+- [L’architecture de Kubernetes expliqué en détails](https://www.youtube.com/watch?v=oG-f6FHWvp4&t=566s)
+- [kubernetes-the-hard-way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
+- [Lightboards - Intro to Kubernetes](https://youtube.com/playlist?list=PL7bmigfV0EqQw4WnD0wF-SRBYttCFeBbF)
