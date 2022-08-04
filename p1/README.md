@@ -16,11 +16,11 @@
 - [linux-scp-command](https://www.ionos.com/digitalguide/server/configuration/linux-scp-command)
 - [ssh-stricthostkeychecking](https://linuxhint.com/ssh-stricthostkeychecking/)
 
-<ul>
+
 Kubernetes
-  <li>https://medium.com/wesionary-team/making-sense-of-kubernetes-configuration-files-yaml-f90b033d5ad1</li>
-  <li>https://faun.pub/understanding-labels-selectors-and-annotations-in-kubernetes-3c01ac943bb1</li>
-  <li>https://www.datree.io/resources/a-kubernetes-guide-for-labels-and-selectors</li>
+- [kubernetes-configuration yaml file](https://medium.com/wesionary-team/making-sense-of-kubernetes-configuration-files-yaml-f90b033d5ad1)
+- [understanding-labels-selectors-and-annotations-in-kubernetes](https://faun.pub/understanding-labels-selectors-and-annotations-in-kubernetes-3c01ac943bb1)
+- [kubernetes-guide-for-labels-and-selectors](https://www.datree.io/resources/a-kubernetes-guide-for-labels-and-selectors)
   
 - [basic-kubectl-commands(https://gitlab.com/nanuchi/youtube-tutorial-series/-/blob/master/basic-kubectl-commands/cli-commands.md)
 - [Kubernetes Tutorial full course](https://www.youtube.com/watch?v=X48VuDVv0do&t=9138s)
