@@ -17,7 +17,7 @@
 - [ssh-stricthostkeychecking](https://linuxhint.com/ssh-stricthostkeychecking/)
 
 
-Kubernetes
+### Kubernetes
 - [kubernetes-configuration yaml file](https://medium.com/wesionary-team/making-sense-of-kubernetes-configuration-files-yaml-f90b033d5ad1)
 - [understanding-labels-selectors-and-annotations-in-kubernetes](https://faun.pub/understanding-labels-selectors-and-annotations-in-kubernetes-3c01ac943bb1)
 - [kubernetes-guide-for-labels-and-selectors](https://www.datree.io/resources/a-kubernetes-guide-for-labels-and-selectors)
