@@ -1,17 +1,13 @@
 # Inception-of-Things (in progress)
 - [Complet Formation Vagrant](https://www.youtube.com/watch?v=z4209uoIbmk)
 
-<ul>K3S “Kubernetes enfin ultra simple et léger avec k3s”
-  <li>https://www.invivoo.com/k3s-kubernetes-enfin-ultra-simpl-leger-devoxx/</li>
-  <li>https://dev.to/abhinavd26/all-about-k3s-lightweight-kubernetes-3ell</li>
-  <li>https://headworq.org/en/how-to-connect-to-kubernetes/</li>
-</ul>
+- [K3S example](https://www.invivoo.com/k3s-kubernetes-enfin-ultra-simpl-leger-devoxx/)
+- [All about k3s](https://dev.to/abhinavd26/all-about-k3s-lightweight-kubernetes-3ell)
 
 
-<ul>if you get this problem "Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network"
-  <li>https://www.virtualbox.org/manual/ch06.html#:~:text=different%20user%20IDs.-,6.7.%C2%A0Host%2DOnly%20Networking,-Host%2Donly%20networking</li>
-  <li>https://stackoverflow.com/questions/69722254/vagrant-up-failing-for-virtualbox-provider-with-e-accessdenied-on-host-only-netw</li>
-</ul>
+### if you get this problem "Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network"
+-[Host-Only Networking](https://www.virtualbox.org/manual/ch06.html#:~:text=different%20user%20IDs.-,6.7.%C2%A0Host%2DOnly%20Networking,-Host%2Donly%20networking)
+- [Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network](https://stackoverflow.com/questions/69722254/vagrant-up-failing-for-virtualbox-provider-with-e-accessdenied-on-host-only-netw)
 
 <ul>Solved "Failed to download metadata for repo AppStream"
 
