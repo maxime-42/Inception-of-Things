@@ -5,7 +5,7 @@
 - [All about k3s](https://dev.to/abhinavd26/all-about-k3s-lightweight-kubernetes-3ell)
 
 
-### if you get this problem "Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network"
+### If you get this problem "Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network"
 - [Host-Only Networking](https://www.virtualbox.org/manual/ch06.html#:~:text=different%20user%20IDs.-,6.7.%C2%A0Host%2DOnly%20Networking,-Host%2Donly%20networking)
 - [Vagrant up failing for VirtualBox provider with E_ACCESSDENIED on host-only network](https://stackoverflow.com/questions/69722254/vagrant-up-failing-for-virtualbox-provider-with-e-accessdenied-on-host-only-netw)
 
