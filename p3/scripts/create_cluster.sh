@@ -50,7 +50,7 @@ install_argo_cd(){
 	kubectl create namespace argocd
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-	log_info 'Waiting argocd pod to be ready to forward tcp trafic.'
+	log_info 'Waiting argocd-server pod to be ready to forward tcp trafic.\n'
 	i=300 		# wait 300s maximum
 	while [ $i -gt 0 ]; do
 		is_ready="$(kubectl -n argocd get pods -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(.type=="Ready")].status}')"
@@ -71,7 +71,10 @@ install_argo_cd(){
 }
 
 get_default_argocd_creds(){
-	echo no
+	local password="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
+	echo 'Argocd credentials'
+	echo 'Username: admin'
+	echo "Password: $password"
 }
 
 main(){ 
@@ -79,6 +82,8 @@ main(){
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME" --port 80:80@loadbalancer --port 443@loadbalancer --subnet 172.42.0.0/16
 	install_argo_cd
+
+	get_default_argocd_creds
 }
 
 main "$@"
