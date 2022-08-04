@@ -1,5 +1,5 @@
 
-##### Kubernetes Servic Tutorial
+##### Kubernetes Service Tutorial
 - [Concept service in Kubernetes](https://www.youtube.com/watch?v=J2xEX7BK83A&t=728s)
 - [examples implementation service](https://www.youtube.com/watch?v=T4Z7visMM4E&t=714s)
 - [Understand service in 15 min](https://www.youtube.com/watch?v=5lzUpDtmWgM&t=460s)
