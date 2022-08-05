@@ -43,7 +43,16 @@ Vagrant.configure("2") do |config|
     
     curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
     echo "k3d installed."
-    
+
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    rm get_helm.sh
+		echo '' >> ~/.bashrc
+		echo "# add helm completion" >> ~/.bashrc
+		echo "source <(helm completion bash)" >> ~/.bashrc
+    echo "helm installed."
+
   SHELL
   
   config.vm.provision :reload

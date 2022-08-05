@@ -41,6 +41,18 @@
 - [bad gateway, disable firewall](https://forums.rancher.com/t/solved-unable-to-use-ingress-traefik-in-k3s-version-v1-23-6-k3s1-418c3fa8/37838)
 - [Default backend (doc traefik)](https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/#global-default-backend-ingresses)
 
+#### Argocd Best practices
+- [argocd best practice blog post](https://codefresh.io/blog/argo-cd-best-practices/)
+- [doc argocd - best practice](https://argo-cd.readthedocs.io/en/stable/user-guide/best_practices/)
+- [Argocd example repo structures](https://github.com/argoproj/argocd-example-apps)
+- [argocd autopilot](https://argocd-autopilot.readthedocs.io/en/stable/)
+
+![alt](https://codefresh.io/wp-content/uploads/2022/03/word-image-20220330-174003-1024x460.png)
+
+#### Gitlab
+- [doc gitlab helm chart](https://docs.gitlab.com/charts/)
+- [deploy using helm](https://docs.gitlab.com/charts/installation/deployment.html#deploy-using-helm)
+
 ##### Nested vms
 - [VT-x is not available](https://www.youtube.com/watch?v=JMT2qimIL9Q)
 - https://blog.mattchung.me/2020/08/18/how-to-configure-ubuntu-w-nested-virtualization-using-vagrant-and-virtualbox-on-macos/
