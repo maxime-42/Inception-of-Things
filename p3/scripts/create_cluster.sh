@@ -81,7 +81,7 @@ get_default_argocd_creds(){
 main(){ 
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
-	k3d cluster create "$CLUSTER_NAME" --port 80:80@loadbalancer --port 443@loadbalancer --subnet 172.42.0.0/16
+	k3d cluster create "$CLUSTER_NAME"
 	install_argo_cd
 
 	get_default_argocd_creds
