@@ -1,0 +1,52 @@
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.provider "virtualbox" do |vb|    
+    vb.cpus = 4
+    vb.memory = 4096
+    # vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+  end
+
+  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+
+	# Forward Kubernetes API port
+	config.vm.network "forwarded_port", guest: 6443, host: 6443
+
+	# Forwward some ports range for NodePorts
+	for p in 30005..30015
+  	config.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
+  end
+
+  config.vm.provision "shell", name: "Setting up Vm", privileged: false,  inline: <<-SHELL
+    set -eux
+
+    # curl -sfL https://get.docker.com | sudo sh -
+    # sudo usermod -aG docker "$USER"
+    # echo "docker installed."
+
+    # mkdir -p ~/bin && cd ~/bin
+    # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    # chmod +x ~/bin/kubectl
+    # cd -
+    # echo "kubectl installed."
+    
+    # curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
+    # echo "k3d installed."
+
+    # curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    # chmod 700 get_helm.sh
+    # ./get_helm.sh
+    # rm get_helm.sh
+		# echo '' >> ~/.bashrc
+		# echo "# add helm completion" >> ~/.bashrc
+		# echo "source <(helm completion bash)" >> ~/.bashrc
+    # echo "helm installed."
+
+    sudo sh -c 'echo "127.0.0.1 minio.iot.com registry.iot.com gitlab.iot.com kas.iot.com" >> /etc/hosts'
+
+		./scripts/create_cluster.sh
+
+  SHELL
+
+end
