@@ -46,6 +46,8 @@
 - [doc argocd - best practice](https://argo-cd.readthedocs.io/en/stable/user-guide/best_practices/)
 - [Argocd example repo structures](https://github.com/argoproj/argocd-example-apps)
 - [argocd autopilot](https://argocd-autopilot.readthedocs.io/en/stable/)
+- [argocd - a simple repo structure example](https://levelup.gitconnected.com/getting-started-with-argocd-on-your-kubernetes-cluster-552ca5d8cf41)
+- [an opinionated standard - folder structure and tools](https://github.com/gnunn-gitops/standards)
 
 ![alt](https://codefresh.io/wp-content/uploads/2022/03/word-image-20220330-174003-1024x460.png)
 
