@@ -86,7 +86,7 @@ main(){
 
 	get_default_argocd_creds
 	
-	kubectl apply -f https://raw.githubusercontent.com/maxime-42/iot_p3/main/config_cd.yaml
+	kubectl apply -f https://raw.githubusercontent.com/maxime-42/iot-p3-mkayumba/main/config_cd.yaml
 }
 
 main "$@"

@@ -95,7 +95,7 @@ install_gitlab(){
 		--timeout 600s \
 		--namespace gitlab --create-namespace \
 		--set global.hosts.domain=iot.com \
-		--set certmanager-issuer.email=gonzalez.julio8959@gmail.com \
+		--set certmanager-issuer.email=no@example.com \
 		--set postgresql.image.tag=13.6.0
 
 	local svcPatch=
