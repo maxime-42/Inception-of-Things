@@ -34,13 +34,16 @@ install_k3d(){
 	else
     log_info "k3d already installed."
 	fi
-	local current_shell="$(basename "$SHELL")"
+	local current_shell
+	current_shell="$(basename "$SHELL")"
 	local rc_path="$HOME/.${current_shell}rc"
 	if ! grep -q 'k3d completion' "$rc_path" ; then
 		log_info "Adding k3d completion in $rc_path"
-		echo '' >> "$rc_path"
-		echo "# add k3d completion" >> "$rc_path"
-		echo "source <(k3d completion $current_shell)" >> "$rc_path"
+		{
+			echo ''
+			echo "# add k3d completion"
+			echo "source <(k3d completion $current_shell)"
+		} >> "$rc_path"
 	else
 		log_info "k3d completion already in $rc_path"
 	fi
@@ -148,9 +151,12 @@ main(){
 	install_argo_cd
 	install_gitlab
 	# wait for gitlab ?
-	gitlab_create_repo
+	# gitlab_create_repo
 
-	# kubectl apply -f https://raw.githubusercontent.com/maxime-42/iot_p3/main/config_cd.yaml
+
+	# wget --no-check-certificate -P /tmp  https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
+	# kubectl apply -f https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
+	# rm /tmpconfig_cd.yaml
 
 	wait_argocd_is_ready
 	get_apps_info
