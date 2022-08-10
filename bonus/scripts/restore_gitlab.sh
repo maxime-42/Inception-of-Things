@@ -1,6 +1,8 @@
 #!/bin/sh
+# https://forum.gitlab.com/t/unable-to-login-as-root-after-backup-restore/46341
 
 set -eux
+
 
 cd $(dirname $0)
 

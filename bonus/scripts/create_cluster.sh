@@ -131,16 +131,17 @@ gitlab_create_repo(){
 get_apps_info(){
 	local password
 	password="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
-	echo 'ArgoCD URL : https://localhost:8080'
-	echo 'ArgoCD username: admin'
-	echo "ArgoCD password: $password"
-	echo ''
+	echo 'ArgoCD:'
+	echo '  - URL : https://localhost:8080'
+	echo '  - Username: admin'
+	echo "  - Password: $password"
+	echo 'Gitlab:'
 	password="$(kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo)"
-	echo 'GitLab URL : https://gitlab.iot.com:8081'
-	echo 'Gitlab username: root'
-	echo "Gitlab password: $password"
-	echo ''
-	echo 'Playground api URL : https://localhost:8888'
+	echo '  - URL : https://gitlab.iot.com:8081'
+	echo '  - Username: root'
+	echo "  - Password: $password"
+	echo 'Playground:'
+	echo '  - URL : https://localhost:8888'
 }
 
 main(){
