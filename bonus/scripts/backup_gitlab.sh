@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# doc: https://docs.gitlab.com/charts/architecture/backup-restore.html
-# backup-utility source: https://gitlab.com/gitlab-org/build/CNG/-/blob/master/gitlab-toolbox/scripts/bin/backup-utility
-# https://www.youtube.com/watch?v=G-KZzn1f-i8&ab_channel=LinuxHelp
-
 set -eu
 
 cd $(dirname $0)

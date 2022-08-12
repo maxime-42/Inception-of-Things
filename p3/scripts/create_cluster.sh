@@ -1,28 +1,9 @@
-#!/bin/sh
-
-RESET="\e[0m"
-LIGHT_RED="\e[91m"
-LIGHT_GREEN="\e[92m"
+#!/bin/bash
 
 set -eu
 
-logging(){
-	local type=$1; shift
-	printf "${RESET}[%b] $0 : %b\n" "$type" "$*"
-}
-
-log_info(){
-	logging "${LIGHT_GREEN}info${RESET}" "$@"
-}
-
-log_error(){
-	logging "${LIGHT_RED}error${RESET}" "$@" >&2
-	exit 1
-}
-
-clear_lastline() {
-	tput cuu 1 && tput el
-}
+# lib
+. $(dirname "$0")/logger.sh
 
 CLUSTER_NAME='iot-p3'
 
@@ -47,46 +28,65 @@ install_k3d(){
 }
 
 install_argo_cd(){
+	local svcPatch=
+	read -r -d '' svcPatch <<-EOF || true
+	{
+		"spec": {
+			"type": "NodePort",
+			"ports": [
+				{
+					"name": "http",
+					"protocol": "TCP",
+					"port": 80,
+					"targetPort": 8080,
+					"nodePort": 30008
+				}
+			]
+		}
+	}
+	EOF
 	kubectl create namespace argocd
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	kubectl patch svc argocd-server -n argocd -p "$svcPatch"
+}
 
-	log_info 'Waiting argocd-server pod to be ready to forward tcp trafic.\n'
-	i=300 		# wait 300s maximum
+wait_argocd_is_ready(){
+	log_info 'Waiting argocd to be ready.\n'
+	i=500 		# wait 500s maximum
 	while [ $i -gt 0 ]; do
 		is_ready="$(kubectl -n argocd get pods -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(.type=="Ready")].status}')"
 		if [ "$is_ready" = 'True' ] ; then
 			break
 		fi
-		clear_lastline
+		log_clear_lastline
 		log_info "Waiting... $i sec before timeout"
 		sleep 5
 		i=$((i - 5))
 	done
 	if [ "$i" = "0" ]; then
-		log_error 'timeout, bye.'
+		log_error 'Argocd failed to start in time.'
 	fi
-
-	kubectl port-forward svc/argocd-server -n argocd 8080:443 1>/dev/null &
-	log_info 'argocd port forwarded to localhost:8080'
 }
 
 get_default_argocd_creds(){
 	local password="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
-	echo 'Argo ui : https://localhost:8080'
-	echo 'Argocd credentials'
-	echo 'Username: admin'
-	echo "Password: $password"
+	echo 'ArgoCD:'
+	echo '  - URL : https://localhost:8080'
+	echo '  - Username: admin'
+	echo "  - Password: $password"
+	echo 'Playground:'
+	echo '  - URL : http://localhost:8888'
 }
 
 main(){ 
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
-	k3d cluster create -p '8888:30007@loadbalancer' "$CLUSTER_NAME"
+	k3d cluster create -p '8888:30007@loadbalancer' -p '8080:30008@loadbalancer' "$CLUSTER_NAME"
 	install_argo_cd
 
-	get_default_argocd_creds
-	
 	kubectl apply -f https://raw.githubusercontent.com/maxime-42/iot-p3-mkayumba/main/config_cd.yaml
+	wait_argocd_is_ready
+	get_default_argocd_creds
 }
 
 main "$@"

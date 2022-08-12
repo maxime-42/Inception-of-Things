@@ -3,11 +3,7 @@
 set -eu
 
 # lib
-source $(dirname "$0")/logger.sh
-
-clear_lastline() {
-	tput cuu 1 && tput el
-}
+. $(dirname "$0")/logger.sh
 
 CLUSTER_NAME='iot-bonus'
 
@@ -65,7 +61,7 @@ wait_argocd_is_ready(){
 		if [ "$is_ready" = 'True' ] ; then
 			break
 		fi
-		clear_lastline
+		log_clear_lastline
 		log_info "Waiting... $i sec before timeout"
 		sleep 5
 		i=$((i - 5))
@@ -122,7 +118,6 @@ get_apps_info(){
 }
 
 main(){
-	log_error good it is working
 	cd $(dirname $0)
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
