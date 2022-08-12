@@ -23,3 +23,4 @@ kubectl -n gitlab exec -i "$pod_name_toolbox" -- bash -c \
 	&& mkdir -p $gitlab_backups_path"
 
 kubectl -n gitlab get secrets gitlab-rails-secret -o yaml > ../config/gitlab/gitlab-rails-secret.yaml
+kubectl -n gitlab get secrets gitlab-gitlab-initial-root-password -o yaml > ../config/gitlab/gitlab-initial-root-password.yaml

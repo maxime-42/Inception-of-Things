@@ -1,24 +1,9 @@
 #!/bin/bash
 
-RESET="\e[0m"
-LIGHT_RED="\e[91m"
-LIGHT_GREEN="\e[92m"
-
 set -eu
 
-logging(){
-	local type=$1; shift
-	printf "${RESET}[%b] $0 : %b\n" "$type" "$*"
-}
-
-log_info(){
-	logging "${LIGHT_GREEN}info${RESET}" "$@"
-}
-
-log_error(){
-	logging "${LIGHT_RED}error${RESET}" "$@" >&2
-	exit 1
-}
+# lib
+source $(dirname "$0")/logger.sh
 
 clear_lastline() {
 	tput cuu 1 && tput el
@@ -90,7 +75,6 @@ wait_argocd_is_ready(){
 	fi
 }
 
-
 install_gitlab(){
 	helm repo add gitlab https://charts.gitlab.io/
 	helm repo update
@@ -121,13 +105,6 @@ install_gitlab(){
 	kubectl -n gitlab patch svc gitlab-nginx-ingress-controller -p "$svcPatch" 
 }
 
-gitlab_create_repo(){
-	local password
-	password="$(kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo)"
-
-
-}
-
 get_apps_info(){
 	local password
 	password="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
@@ -141,23 +118,24 @@ get_apps_info(){
 	echo '  - Username: root'
 	echo "  - Password: $password"
 	echo 'Playground:'
-	echo '  - URL : https://localhost:8888'
+	echo '  - URL : http://localhost:8888'
 }
 
 main(){
+	log_error good it is working
 	cd $(dirname $0)
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME" -p '8888:30007@server:0' -p '8080:30008@server:0' -p '8081:30009@server:0'
 	install_argo_cd
 	install_gitlab
-	# wait for gitlab ?
-	# gitlab_create_repo
+	log_info 'Waiting gitlab services to be ready before restoring backup...'
+	kubectl -n gitlab wait --timeout=-1s --for=condition=available deployments.apps gitlab-webservice-default	
+	./restore_gitlab.sh
 
-
-	# wget --no-check-certificate -P /tmp  https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
-	# kubectl apply -f https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
-	# rm /tmpconfig_cd.yaml
+	wget --no-check-certificate -P /tmp  https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
+	kubectl apply -f /tmp/config_cd.yaml
+	rm /tmp/config_cd.yaml
 
 	wait_argocd_is_ready
 	get_apps_info
