@@ -7,6 +7,26 @@ set -eu
 
 CLUSTER_NAME='iot-bonus'
 
+install_docker(){
+	if ! [ -x "$(command -v docker)" ]; then
+    log_info "docker not found, installing it..."
+		curl -sfL https://get.docker.com | sudo sh - > /dev/null
+    # sudo usermod -aG docker "$USER"
+		id
+		newgrp docker
+		id
+		su -c "$0" "$(whoami)"
+    echo "docker installed."
+    log_info "docker installed."
+		exec $0
+	else
+    log_info "docker already installed."
+		id
+		newgrp docker
+		id
+	fi
+}
+
 install_k3d(){
 	if ! [ -x "$(command -v k3d)" ]; then
     log_info "k3d not found, installing it..."
@@ -119,6 +139,7 @@ get_apps_info(){
 
 main(){
 	cd $(dirname $0)
+	install_docker
 	install_k3d
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME" -p '8888:30007@server:0' -p '8080:30008@server:0' -p '8081:30009@server:0'
