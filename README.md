@@ -54,6 +54,14 @@
 #### Gitlab
 - [doc gitlab helm chart](https://docs.gitlab.com/charts/)
 - [deploy using helm](https://docs.gitlab.com/charts/installation/deployment.html#deploy-using-helm)
+- [x509: certificate signed by unknown authority](https://docs.gitlab.com/runner/configuration/tls-self-signed.html)
+
+#### gitlaab backup
+- [backup restore](https://docs.gitlab.com/charts/architecture/backup-restore.html)
+- [backup restore](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/backup-restore/backup.md)
+- [gitlab administration](https://docs.gitlab.com/ee/administration/get_started.html)
+- [backup self-managed instance - omnibus and helm](https://docs.gitlab.com/ee/administration/get_started.html#back-up-a-gitlab-self-managed-instance)
+- [backup with helm chart gitlab instance](https://docs.gitlab.com/charts/backup-restore/)
 
 ##### Nested vms
 - [VT-x is not available](https://www.youtube.com/watch?v=JMT2qimIL9Q)

@@ -1,48 +1,84 @@
 #!/bin/bash
 
-RESET="\e[0m"
-LIGHT_RED="\e[91m"
-LIGHT_GREEN="\e[92m"
-
 set -eu
 
-logging(){
-	local type=$1; shift
-	printf "${RESET}[%b] $0 : %b\n" "$type" "$*"
-}
-
-log_info(){
-	logging "${LIGHT_GREEN}info${RESET}" "$@"
-}
-
-log_error(){
-	logging "${LIGHT_RED}error${RESET}" "$@" >&2
-	exit 1
-}
-
-clear_lastline() {
-	tput cuu 1 && tput el
-}
+# lib
+. $(dirname "$0")/logger.sh
 
 CLUSTER_NAME='iot-bonus'
 
 install_k3d(){
 	if ! [ -x "$(command -v k3d)" ]; then
-    log_info "k3d not found, installing it..."
+    	log_info "k3d not found, installing it..."
 		curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
-    log_info "k3d installed."
+    	log_info "k3d installed."
 	else
     log_info "k3d already installed."
 	fi
-	local current_shell="$(basename "$SHELL")"
+	local current_shell
+	current_shell="$(basename "$SHELL")"
 	local rc_path="$HOME/.${current_shell}rc"
 	if ! grep -q 'k3d completion' "$rc_path" ; then
 		log_info "Adding k3d completion in $rc_path"
-		echo '' >> "$rc_path"
-		echo "# add k3d completion" >> "$rc_path"
-		echo "source <(k3d completion $current_shell)" >> "$rc_path"
+		{
+			echo ''
+			echo "# add k3d completion"
+			echo "source <(k3d completion $current_shell)"
+		} >> "$rc_path"
 	else
 		log_info "k3d completion already in $rc_path"
+	fi
+}
+
+install_kubectl(){
+	if ! [ -x "$(command -v kubectl)" ]; then
+	    log_info "kubectl not found, installing it..."
+		mkdir -p ~/bin && cd ~/bin
+    	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    	chmod +x ~/bin/kubectl
+    	cd -
+    	log_info "kubectl installed."
+	else
+	    log_info "kubectl already installed."
+	fi
+	local current_shell
+	current_shell="$(basename "$SHELL")"
+	local rc_path="$HOME/.${current_shell}rc"
+	if ! grep -q 'kubectl completion' "$rc_path" ; then
+		log_info "Adding kubectl completion in $rc_path"
+		{
+			echo ''
+			echo "# add kubectl completion"
+			echo "source <(kubectl completion $current_shell)"
+		} >> "$rc_path"
+	else
+		log_info "kubectl completion already in $rc_path"
+	fi
+}
+
+install_helm(){
+	if ! [ -x "$(command -v helm)" ]; then
+    	log_info "helm not found, installing it..."
+		curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    	chmod 700 get_helm.sh
+    	./get_helm.sh
+    	rm get_helm.sh
+    	log_info "helm installed."
+	else
+    	log_info "helm already installed."
+	fi
+	local current_shell
+	current_shell="$(basename "$SHELL")"
+	local rc_path="$HOME/.${current_shell}rc"
+	if ! grep -q 'helm completion' "$rc_path" ; then
+		log_info "Adding helm completion in $rc_path"
+		{
+			echo ''
+			echo "# add helm completion"
+			echo "source <(helm completion $current_shell)"
+		} >> "$rc_path"
+	else
+		log_info "helm completion already in $rc_path"
 	fi
 }
 
@@ -77,7 +113,7 @@ wait_argocd_is_ready(){
 		if [ "$is_ready" = 'True' ] ; then
 			break
 		fi
-		clear_lastline
+		log_clear_lastline
 		log_info "Waiting... $i sec before timeout"
 		sleep 5
 		i=$((i - 5))
@@ -86,7 +122,6 @@ wait_argocd_is_ready(){
 		log_error 'Argocd failed to start in time.'
 	fi
 }
-
 
 install_gitlab(){
 	helm repo add gitlab https://charts.gitlab.io/
@@ -118,39 +153,39 @@ install_gitlab(){
 	kubectl -n gitlab patch svc gitlab-nginx-ingress-controller -p "$svcPatch" 
 }
 
-gitlab_create_repo(){
-	local password
-	password="$(kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo)"
-
-
-}
-
 get_apps_info(){
 	local password
 	password="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
-	echo 'ArgoCD URL : https://localhost:8080'
-	echo 'ArgoCD username: admin'
-	echo "ArgoCD password: $password"
-	echo ''
+	echo 'ArgoCD:'
+	echo '  - URL : https://localhost:8080'
+	echo '  - Username: admin'
+	echo "  - Password: $password"
+	echo 'Gitlab:'
 	password="$(kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo)"
-	echo 'GitLab URL : https://gitlab.iot.com:8081'
-	echo 'Gitlab username: root'
-	echo "Gitlab password: $password"
-	echo ''
-	echo 'Playground api URL : https://localhost:8888'
+	echo '  - URL : https://gitlab.iot.com:8081'
+	echo '  - Username: root'
+	echo "  - Password: $password"
+	echo 'Playground:'
+	echo '  - URL : http://localhost:8888'
 }
 
 main(){
 	cd $(dirname $0)
+	install_kubectl
 	install_k3d
+	install_helm
+
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME" -p '8888:30007@server:0' -p '8080:30008@server:0' -p '8081:30009@server:0'
 	install_argo_cd
 	install_gitlab
-	# wait for gitlab ?
-	gitlab_create_repo
+	log_info 'Waiting gitlab services to be ready before restoring backup...'
+	kubectl -n gitlab wait --timeout=-1s --for=condition=available deployments.apps gitlab-webservice-default	
+	./restore_gitlab.sh
 
-	# kubectl apply -f https://raw.githubusercontent.com/maxime-42/iot_p3/main/config_cd.yaml
+	wget --no-check-certificate -P /tmp  https://gitlab.iot.com:8081/root/iot-p3-mkayumba/-/raw/main/config_cd.yaml
+	kubectl apply -f /tmp/config_cd.yaml
+	rm /tmp/config_cd.yaml
 
 	wait_argocd_is_ready
 	get_apps_info
