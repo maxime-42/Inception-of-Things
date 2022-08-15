@@ -7,31 +7,11 @@ set -eu
 
 CLUSTER_NAME='iot-bonus'
 
-install_docker(){
-	if ! [ -x "$(command -v docker)" ]; then
-    log_info "docker not found, installing it..."
-		curl -sfL https://get.docker.com | sudo sh - > /dev/null
-    # sudo usermod -aG docker "$USER"
-		id
-		newgrp docker
-		id
-		su -c "$0" "$(whoami)"
-    echo "docker installed."
-    log_info "docker installed."
-		exec $0
-	else
-    log_info "docker already installed."
-		id
-		newgrp docker
-		id
-	fi
-}
-
 install_k3d(){
 	if ! [ -x "$(command -v k3d)" ]; then
-    log_info "k3d not found, installing it..."
+    	log_info "k3d not found, installing it..."
 		curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | sudo bash -
-    log_info "k3d installed."
+    	log_info "k3d installed."
 	else
     log_info "k3d already installed."
 	fi
@@ -47,6 +27,59 @@ install_k3d(){
 		} >> "$rc_path"
 	else
 		log_info "k3d completion already in $rc_path"
+	fi
+}
+
+install_kubectl(){
+	if ! [ -x "$(command -v kubectl)" ]; then
+	    log_info "kubectl not found, installing it..."
+		mkdir -p ~/bin && cd ~/bin
+    	curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    	chmod +x ~/bin/kubectl
+    	cd -
+    	log_info "kubectl installed."
+	else
+	    log_info "kubectl already installed."
+	fi
+	local current_shell
+	current_shell="$(basename "$SHELL")"
+	local rc_path="$HOME/.${current_shell}rc"
+	if ! grep -q 'kubectl completion' "$rc_path" ; then
+		log_info "Adding kubectl completion in $rc_path"
+		{
+			echo ''
+			echo "# add kubectl completion"
+			echo "source <(kubectl completion $current_shell)"
+		} >> "$rc_path"
+	else
+		log_info "kubectl completion already in $rc_path"
+	fi
+}
+
+install_helm(){
+	if ! [ -x "$(command -v helm)" ]; then
+    	log_info "helm not found, installing it..."
+		curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    	chmod 700 get_helm.sh
+    	./get_helm.sh
+    	rm get_helm.sh
+    	log_info "helm installed."
+	else
+    	log_info "helm already installed."
+	fi
+	local current_shell
+	current_shell="$(basename "$SHELL")"
+	local rc_path="$HOME/.${current_shell}rc"
+	if ! grep -q 'helm completion' "$rc_path" ; then
+		log_info "Adding helm completion in $rc_path"
+		{
+			echo '' >> ~/.bashrc
+			echo "# add helm completion" >> ~/.bashrc
+			echo "source <(helm completion bash)" >> ~/.bashrc
+    		echo "helm installed."
+		} >> "$rc_path"
+	else
+		log_info "helm completion already in $rc_path"
 	fi
 }
 
@@ -139,8 +172,10 @@ get_apps_info(){
 
 main(){
 	cd $(dirname $0)
-	install_docker
+	install_kubectl
 	install_k3d
+	install_helm
+
 	k3d cluster delete "$CLUSTER_NAME"
 	k3d cluster create "$CLUSTER_NAME" -p '8888:30007@server:0' -p '8080:30008@server:0' -p '8081:30009@server:0'
 	install_argo_cd
