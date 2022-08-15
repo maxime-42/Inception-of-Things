@@ -73,10 +73,9 @@ install_helm(){
 	if ! grep -q 'helm completion' "$rc_path" ; then
 		log_info "Adding helm completion in $rc_path"
 		{
-			echo '' >> ~/.bashrc
-			echo "# add helm completion" >> ~/.bashrc
-			echo "source <(helm completion bash)" >> ~/.bashrc
-    		echo "helm installed."
+			echo ''
+			echo "# add helm completion"
+			echo "source <(helm completion $current_shell)"
 		} >> "$rc_path"
 	else
 		log_info "helm completion already in $rc_path"
