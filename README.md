@@ -7,7 +7,7 @@
 ![alt](reference/p2.drawio.svg)
 
 #### p3 Schema :
-![alt](P2/Diagramme sans nom.drawio.png)
+![alt](reference/p3.drawio.svg)
 
 #### Sources :
 
